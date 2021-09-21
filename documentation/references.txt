@@ -1,0 +1,6 @@
+Additional references:
+https://www.samouczekprogramisty.pl/porownywanie-obiektow-metody-equals-i-hashcode-w-jezyku-java/
+https://javastart.pl/baza-wiedzy/java-zaawansowane/enum
+http://frozenlake-dul.blogspot.com/2014/06/choosing-suitable-data-structurejava.html
+https://www.hellocodeclub.com/when-to-use-which-data-structure-top-6-data-structures/
+https://medium.com/omarelgabrys-blog/data-structures-a-quick-comparison-6689d725b3b0
