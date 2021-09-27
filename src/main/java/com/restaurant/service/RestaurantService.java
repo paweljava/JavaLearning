@@ -4,10 +4,9 @@ import com.restaurant.model.Meal;
 import com.restaurant.model.Restaurant;
 import com.restaurant.model.RestaurantType;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
+import static java.util.UUID.randomUUID;
 
 public class RestaurantService {
 
@@ -31,12 +30,30 @@ public class RestaurantService {
             Type restaurant id(should be shown in restaurant print), then all meals of a specific restaurant should be printed
     */
 
-    private List<Restaurant> listOfRestaurants = new ArrayList<>();
-    private List<Meal> listOfMeals = new ArrayList<>();
+    // 1. Zrozumiec o co chodzi
+    // a) wyjatek -> przerywamy program
+    // b) cofamy sie do menu
+    // c) prosze wpisac ponownie typ z podanych typow - X
+    // 2. Wymyslec jak to zrobic
+//        a) sprawdzamy czy nasz typ znajduje sie w liscie typow
+//        b) jesli nie, zmuszamy uzytkonika do nastepnej iteracji wyboru typu
+//        c) jesli tak, kontynuujemy proces
+//        3. Robimy to
+
+    private final List<Restaurant> restaurantsList = new ArrayList<>(List.of(
+//        new Restaurant("U grubego", "Sucha 13", RestaurantType.POLISH)
+    ));
+    private final List<Meal> listOfMeals = new ArrayList<>();
+
+    private final RestaurantCrudService restaurantCrudService;
+
+    public RestaurantService(RestaurantCrudService restaurantCrudService) {
+        this.restaurantCrudService = restaurantCrudService;
+    }
 
     public void process() {
         Scanner read = new Scanner(System.in);
-        do {
+        while (true) {
             System.out.println("Type \"exit\" to exit ");
             System.out.println("Type \"1\" to create restaurant ");
             System.out.println("Type \"2\" to add a meal to a restaurant");
@@ -53,7 +70,7 @@ public class RestaurantService {
                 case "4" -> showMeals(read);
                 default -> System.out.println("Type correct value!");
             }
-        } while(true);
+        }
     }
 
     public void exit() {
@@ -62,47 +79,69 @@ public class RestaurantService {
     }
 
     public void addRestaurant(Scanner read) {
-        RestaurantType [] restaurantTypes = RestaurantType.values();
+        RestaurantType[] restaurantTypes = RestaurantType.values();
 
         System.out.print("Type restaurant name: ");
         var name = read.nextLine();
         System.out.print("Type restaurant address: ");
         var address = read.nextLine();
-        System.out.print("Type restaurant type. Available types: ");
-        for (RestaurantType k : restaurantTypes) {
-            System.out.print(k.name() + " ");
-        }
+
         // Validation
-        // var type = RestaurantType.valueOf(toUpperCase(read.nextLine()));
-        var type = RestaurantType.valueOf(read.nextLine());
-        //public boolean validation (String ) {
-        //    return validation;
-        //}
+        var isIncorrectType = true;
+        RestaurantType resolvedType = RestaurantType.AMERICAN;
+        while (isIncorrectType) {
+            System.out.print("Type restaurant type. Available types: ");
+            for (RestaurantType k : restaurantTypes) {
+                System.out.print(k.name() + " ");
+            }
+            var consoleInputType = read.nextLine().toUpperCase(Locale.ROOT);
+            if (isValidRestaurantType(consoleInputType)) {
+                isIncorrectType = false;
+                resolvedType = RestaurantType.valueOf(consoleInputType);
+            }
+
+        }
 
         // Creation
-        var restaurant = new Restaurant(name, address, type);
-        listOfRestaurants.add(restaurant);
-        restaurant.hashCode();
+        var restaurant =restaurantCrudService.add(name, address, resolvedType);
+
         // Resataurant information
 
         System.out.println("Restaurant created:");
-        System.out.println("Restaurant id: " + listOfRestaurants.size());
+        System.out.println("Restaurant id: " + restaurantsList.size());
         System.out.println("Name: " + name);
         System.out.println("Address: " + address);
-        System.out.println("Type: " + type);
+        System.out.println("Type: " + resolvedType);
+    }
+
+    private boolean isValidRestaurantType(String consoleInputType) {
+        try {
+            RestaurantType.valueOf(consoleInputType);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
     public void addMeal(Scanner read) {
+        if (restaurantsList.isEmpty()) {
+            System.out.println("Lista restauracji jest pusta, nie mozna dodac dania");
+            return;
+        }
         System.out.print("Type meal name: ");
         var name = read.nextLine();
         System.out.print("Type meal price: ");
         var price = read.nextDouble();
+        System.out.println("Dostepnne restauracje i ich id");
+        restaurantsList.forEach(Restaurant::displayRestaurant);
         System.out.print("Type restaurant id to add the meal to particular restaurant: ");
-        var id = Integer.valueOf(read.nextLine());
+        // HOMEWORK - validate if uuid is correct, is assigned to restaurant and assign to requested restaurant
+        var id = UUID.fromString(read.nextLine());
+
     }
 
-    public void showRestaurants () {
-        for (Restaurant restaurant : listOfRestaurants) {
+    public void showRestaurants() {
+        for (Restaurant restaurant : restaurantsList) {
             restaurant.displayRestaurant();
         }
     }
