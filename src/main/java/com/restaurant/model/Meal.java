@@ -1,22 +1,35 @@
 package com.restaurant.model;
 
+import java.util.UUID;
+
 public class Meal {
-
+    private UUID mealId;
     private String name;
-    private double price;
+    private float price;
 
-    public Meal (String name, double price) {
+    public Meal (UUID mealId, String name, float price) {
+        this.mealId = mealId;
         this.name = name;
         this.price = price;
     }
 
-    public String getName(){return name;}
+    public UUID getMealId() {return mealId;}
+    public String getName(String name){return name;}
     public void setName(String name) {this.name = name;}
-    public double getPrice() {return price;}
-    public void setPrice(double price) {this.price = price;}
+    public float getPrice(float price) {return price;}
+    public void setPrice(float price) {this.price = price;}
 
-    public void displayMeal() {
-        System.out.print(name + " ");
-        System.out.print(price + " ");
-    };
+    @Override
+    public String toString() {
+        return "Meal{" +
+                "mealId=" + mealId +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                '}';
+    }
+
+    //    public void displayMeal() {
+//        System.out.print(name + " ");
+//        System.out.print(price + " ");
+//    };
 }

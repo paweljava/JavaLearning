@@ -1,23 +1,26 @@
 package com.restaurant.model;
 
+import java.util.List;
 import java.util.UUID;
 
 public class Restaurant {
 
-    private UUID id;
+    private UUID restaurantId;
     private String name;
     private String address;
     private RestaurantType type;
+    private List<Meal> mealList;
 
-    public Restaurant(UUID id, String name, String address, RestaurantType type) {
-        this.id = id;
+    public Restaurant(UUID restaurantId, String name, String address, RestaurantType type) {
+        this.restaurantId = restaurantId;
         this.name = name;
         this.address = address;
         this.type = type;
     }
 
-    public UUID getId() {
-        return id;
+
+    public UUID getRestaurantId() {
+        return restaurantId;
     }
 
     public String getName() {
@@ -32,12 +35,24 @@ public class Restaurant {
         return type;
     }
 
-    public void displayRestaurant() {
-        System.out.print(id + " ");
+ /*   public void displayRestaurant() {
+        System.out.print(restaurantId + " ");
         System.out.print(name + " ");
         System.out.print(address + " ");
         System.out.println(type);
-    };
+    };*/
 
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "id = " + restaurantId +
+                ", name = '" + name + '\'' +
+                ", address = '" + address + '\'' +
+                ", type = " + type +
+                '}';
+    }
+    public void metoda() {
+        System.out.println("cos");
+    }
 }
 
