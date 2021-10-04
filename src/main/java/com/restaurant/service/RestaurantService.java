@@ -3,53 +3,22 @@ package com.restaurant.service;
 import com.restaurant.model.Meal;
 import com.restaurant.model.Restaurant;
 import com.restaurant.model.RestaurantType;
+
 import java.util.*;
 
 public class RestaurantService {
 
-    /*
-    2. Create a console restaurant system, which allows you to create a new restaurant and meal for a particular restaurant.
-     The restaurant should contain id, name, address, type, Meal should have name, price and id. Ids are assigned by the program during entity creation.
-            For program execution use IntellIJ (run or debug program):
-            At the beginning the program prints instructions, after each point user input is expected.
-            If you want to exit, type “exit”
-            If you want to create a restaurant, type “1”, if the user chooses this flow, then
-            Type restaurant name
-            Type restaurant address
-            Type restaurant type[ASIAN, MEDITERRANEAN, FRENCH, AMERICAN, POLISH], nice to have - validation for those values
-            Show restaurant information is added with the restaurant id(which may be important later)
-            If you want to add a meal to a restaurant, type “2”, if the user chooses this flow, then
-            Type meal name
-            Type meal price
-            Type restaurant id to add the meal to particular restaurant
-            If user types “3” Show all restaurants, if user chooses this flow, then all restaurants should be printed
-            If user types “4”,  shows all meals in a particular restaurant , if user chooses this flow, then
-            Type restaurant id(should be shown in restaurant print), then all meals of a specific restaurant should be printed
-    */
-
-    //  1. Zrozumiec o co chodzi
-    //    a) wyjatek -> przerywamy program
-    //    b) cofamy sie do menu
-    //    c) prosze wpisac ponownie typ z podanych typow - X
-    //  2. Wymyslec jak to zrobic
-    //    a) sprawdzamy czy nasz typ znajduje sie w liscie typow
-    //    b) jesli nie, zmuszamy uzytkonika do nastepnej iteracji wyboru typu
-    //    c) jesli tak, kontynuujemy proces
-    //  3. Robimy to
-
     private final List<Restaurant> restaurantsList = new ArrayList<>(List.of());
     private final List<Meal> mealList = new ArrayList<>(List.of());
-    private final List<Pair> pairs = new ArrayList<>();
     private final RestaurantCrudService restaurantCrudService;
 
-    //private UUID restaurantId;
     public RestaurantService(RestaurantCrudService restaurantCrudService) {
         this.restaurantCrudService = restaurantCrudService;
     }
 
     public void process() {
-        Scanner read = new Scanner(System.in);
-        while (true) {// 'while' statement cannot complete without throwing an exception - instrukcja case
+        final var read = new Scanner(System.in);
+        while (true) {
 
             System.out.println("Type \"exit\" to exit ");
             System.out.println("Type \"1\" to create restaurant ");
@@ -74,15 +43,16 @@ public class RestaurantService {
         System.out.println("Bye bye");
         System.exit(0);
     }
+
     public void addRestaurant(Scanner read) {
         RestaurantType[] restaurantTypes = RestaurantType.values();
 
-        UUID restaurantId = UUID.randomUUID();// Jak nie inicjalizowac nulla ?
+        final var restaurantId = UUID.randomUUID();
         System.out.print("Type restaurant name: ");
         var name = read.nextLine();
         System.out.print("Type restaurant address: ");
         var address = read.nextLine();
-        RestaurantType type = RestaurantType.ASIAN;// RestaurantType type; Jak nie inicjalizowac nulla ?
+        RestaurantType type = RestaurantType.ASIAN;
 
         // Validation
         var isIncorrectType = true;
@@ -95,12 +65,10 @@ public class RestaurantService {
             if (isValidRestaurantType(consoleInputType)) {
                 isIncorrectType = false;
                 type = RestaurantType.valueOf(consoleInputType);
-                //resolvedType = RestaurantType.valueOf(consoleInputType);
             }
         }
 
         // Creation
-        // var restaurant = restaurantCrudService.add(name, address, resolvedType);
         var restaurant = new Restaurant(restaurantId, name, address, type);
         restaurantsList.add(restaurant);
 
@@ -113,6 +81,32 @@ public class RestaurantService {
         System.out.println();
     }
 
+    public void addMeal(Scanner scanner) {
+        if (isRestaurantListEmpty()) return;
+
+        System.out.print("Type meal name: ");
+        var name = scanner.nextLine();
+
+        System.out.print("Type meal price: ");
+        var price = scanner.nextFloat();
+
+        System.out.print("Type meal type: ");
+        var type = scanner.nextLine();
+
+        System.out.println("Available restaurants and id's: ");
+        restaurantsList.forEach(System.out::println);
+        System.out.print("Type restaurant id to add the meal to particular restaurant: ");
+
+        var restaurantId = restaurantId(scanner);
+        System.out.println("Correct id entered" + restaurantId); // dla mnie
+        final var foundRestaurant = findRestaurantById(restaurantId);
+        final var meal = new Meal(UUID.randomUUID(), name, price);
+        foundRestaurant.ifPresent(r -> {
+            r.addMeal(meal);
+            System.out.println("Meal added");
+        });
+    }
+
     private boolean isValidRestaurantType(String consoleInputType) {
         try {
             RestaurantType.valueOf(consoleInputType);
@@ -123,52 +117,33 @@ public class RestaurantService {
         }
     }
 
-    public void addMeal(Scanner read) {
-        if (restaurantsList.isEmpty()) {
-            System.out.println("Restaurants list's is empty, you can't add meal");
-            return;
-        }
-        //UUID id = UUID.randomUUID();
-        var mealId = UUID.randomUUID();
-        System.out.print("Type meal name: ");
-        var name = read.nextLine();
-        System.out.print("Type meal price: ");
-        var price = read.nextFloat();
-
-        System.out.println("Available restaurants and id's: ");
-        restaurantsList.forEach(restaurant -> System.out.println(restaurant));
-        System.out.print("Type restaurant id to add the meal to particular restaurant: ");
-
-        // HOMEWORK - validate if uuid is correct, is assigned to restaurant and assign to requested restaurant
+    private UUID restaurantId(Scanner read) {
+        UUID result = null;
         var isIncorrectId = true;
         while (isIncorrectId) {
             var consoleInputId = read.nextLine();
             if (isValidRestaurantId(consoleInputId)) {
-                isIncorrectId =  false;
-               // id = UUID.fromString(consoleInputId);
+                isIncorrectId = false;
+                result = UUID.fromString(consoleInputId);
             } else System.out.print("Type correct id: ");
         }
-
-        System.out.println("wpisalem poprawne id"); // dla mnie
-        var meal = new Meal(mealId, name, price);
-        // jak przypisac jedzenie do restauracji ?
-        mealList.add(meal);
-        //mealList.forEach(meal2 -> System.out.println(meal.getMealId()));
-        // dlaczego ta instrukcja wypisuje tylko jedna wartosc?
+        return result;
     }
 
-    /*public List<Restaurant> restaurants () {
-        () -> Restaurant.
-
-        return Id;
-    }*/
+    private boolean isRestaurantListEmpty() {
+        if (restaurantsList.isEmpty()) {
+            System.out.println("Restaurants list's is empty, you can't add meal");
+            return true;
+        }
+        return false;
+    }
 
     private boolean isValidRestaurantId(String consoleInputId) {
         try {
             UUID.fromString(consoleInputId);// Result of 'UUID.fromString()' is ignored ?
-
             return true;
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -184,41 +159,36 @@ public class RestaurantService {
         System.out.println("Restaurants id's: ");
         restaurantsList.forEach(restaurant -> System.out.println(restaurant.getRestaurantId()));
         System.out.print("Type restaurant id: ");
-        UUID id;
-        var isIncorrectId = true;
-        while (isIncorrectId) {
+        UUID restaurantId = null;
+        var isIdNotFilled = true;
+        while (isIdNotFilled) {
             var consoleInputId = read.nextLine();
             if (isValidRestaurantId(consoleInputId)) {
-                isIncorrectId =  false;
-                 id = UUID.fromString(consoleInputId);
+                isIdNotFilled = false;
+                restaurantId = UUID.fromString(consoleInputId);
             } else System.out.print("Type correct id: ");
         }
+        Optional<Restaurant> foundRestaurant = findRestaurantById(restaurantId);
+        if (foundRestaurant.isPresent()) {
+            foundRestaurant.get().showAllMeals();
+        } else {
+            System.out.printf("Restaurant with id %s not found%n", restaurantId);
+        }
 
-        //var id = UUID.fromString(read.nextLine());
         System.out.println("List meals of restaurant id: ");
-        mealList.forEach(meal -> System.out.println(meal));
+        mealList.forEach(System.out::println);
         System.out.println("lista restauracji ponownie w 4");
         restaurantsList.forEach(restaurant -> System.out.println(restaurant.getRestaurantId()));
+    }
 
-
-        /*
-        //restaurantsList.toString(restaurant -> System.out.println(restaurant.getRestaurantId()));
-         var id2 = restaurantsList.stream()
-                .map(Restaurant::getRestaurantId)
-                .findAny(restaurantsList -> restaurantsList)
-
-                .findFirst(restaurantsList -> restaurantsList.getRestaurantId())
-                .flatMap(restaurantsList -> restaurantsList.getRestaurantId())
-                .anyMatch(restaurantList -> restaurantList.getRestaurantId());
-
-        //.flatMap(restaurantsList -> restaurantsList.getRestaurantId())
-
-                //.findM(restaurantsList -> restaurantsList.getRestaurantId())*/
-
-
-
+    private Optional<Restaurant> findRestaurantById(UUID restaurantId) {
+        var restaurants = restaurantCrudService.restaurantsList;
+        Optional<Restaurant> foundRestaurant = Optional.empty();
+        for (int i = 0; i < restaurants.size(); i++) {
+            if (restaurants.get(i).getRestaurantId().equals(restaurantId)) {
+                foundRestaurant = Optional.ofNullable(restaurants.get(i));
+            }
+        }
+        return foundRestaurant;
     }
 }
-
-// 1. Jak ograniczyc i zaokraglic float/double do dwoch miejsc po przecinku ?
-// 2. Co to za malpa z lewej strony ?

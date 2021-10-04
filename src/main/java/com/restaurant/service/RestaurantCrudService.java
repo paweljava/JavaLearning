@@ -5,6 +5,7 @@ import com.restaurant.model.RestaurantType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 //CRUD
@@ -16,7 +17,7 @@ import java.util.UUID;
 public class RestaurantCrudService {
 
     public final List<Restaurant> restaurantsList = new ArrayList<>(List.of(
-//        new Restaurant("U grubego", "Sucha 13", RestaurantType.POLISH)
+            new Restaurant("U grubego", "Sucha 13", RestaurantType.POLISH)
     ));
 
     Restaurant add(String name, String address, RestaurantType restaurantType) {

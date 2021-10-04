@@ -2,8 +2,6 @@ package com.restaurant;
 
 import com.restaurant.service.RestaurantCrudService;
 import com.restaurant.service.RestaurantService;
-// OOP
-// DS
 
 public class RestaurantConsoleApp {
 

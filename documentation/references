@@ -1,0 +1,42 @@
+References:
+Classes vs instances
+https://www.samouczekprogramisty.pl/porownywanie-obiektow-metody-equals-i-hashcode-w-jezyku-java/
+https://stackoverflow.com/questions/1215881/the-difference-between-classes-objects-and-instances#:~:text=A%20class%20is%20a%20blueprint,an%20object%20to%20its%20class.
+https://alfredjava.wordpress.com/2008/07/08/class-vs-object-vs-instance/
+https://stackoverflow.com/questions/11993077/difference-between-static-methods-and-instance-methods
+https://www.baeldung.com/java-static#:~:text=In%20the%20Java%20programming%20language,all%20instances%20of%20the%20class.
+
+Data structures:
+https://www.hellocodeclub.com/when-to-use-which-data-structure-top-6-data-structures/
+https://medium.com/omarelgabrys-blog/data-structures-a-quick-comparison-6689d725b3b0
+https://medium.com/swlh/data-structures-with-java-b3d66a60ef2a
+
+Optional(monads)
+https://dzone.com/articles/what-is-a-monad-basic-theory-for-a-java-developer
+https://klolo.github.io/blog/2017/08/05/jak-uzywac-optional/
+
+
+
+Tasks:
+1. Data structures - Create datastructures package and create class per exercise. Implement the needed logic in main() method.
+Use integers(Integer) as data structure data, if there is a need for 2 lists with various elements, create them.
+In case of map use Map<Integer, String> data type.
+a) Write a Java program to replace the second element of a ArrayList with the specified element.
+b) Write a Java program to print all the elements of a ArrayList using the position of the elements.
+c) Write a Java program to check if a particular element exists in a linked list.
+d) Write a Java program to convert a linked list to array list.
+e) Write a Java program to compare two sets and retain elements which are same on both sets.
+f) Write a Java program to remove all of the elements from a hash set.
+g) Write a Java program to get the value of a specified key in a map
+h) Write a Java program to get a set view of the keys contained in this map
+
+
+i)* Write your own LinkedList implementation(you can try to google this problem, example https://www.geeksforgeeks.org/implementing-a-linked-list-in-java-using-class/)
+j)* Prepare answers for questions:
+What data structure is best for keeping unique elements and why?
+What data structure is best for fast reads and why?
+What data structure is best for fast writes and why?
+
+2. Finish console app
+
+Tasks with asterisks are very optional
