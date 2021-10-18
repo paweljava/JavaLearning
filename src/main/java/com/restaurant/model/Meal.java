@@ -14,9 +14,9 @@ public class Meal {
     }
 
     public UUID getMealId() {return mealId;}
-    public String getName(String name){return name;}
+    public String getName(){return name;}
     public void setName(String name) {this.name = name;}
-    public float getPrice(float price) {return price;}
+    public float getPrice() {return price;}
     public void setPrice(float price) {this.price = price;}
 
     @Override
@@ -27,6 +27,8 @@ public class Meal {
                 ", price=" + price +
                 '}';
     }
+
+
 
     //    public void displayMeal() {
 //        System.out.print(name + " ");

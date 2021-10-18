@@ -3,6 +3,7 @@ package com.restaurant.service;
 import com.restaurant.model.Meal;
 import com.restaurant.model.Restaurant;
 import com.restaurant.model.RestaurantType;
+
 import java.util.*;
 
 public class RestaurantService {
@@ -39,9 +40,12 @@ public class RestaurantService {
 
     private final List<Restaurant> restaurantsList = new ArrayList<>(List.of());
     private final List<Meal> mealList = new ArrayList<>(List.of());
-    private final List<Pair> pairs = new ArrayList<>();
+    //  private Map<UUID, Meal> idToMeal = new HashMap<>();
+    private Set<String> abc = new HashSet<>();
     private final RestaurantCrudService restaurantCrudService;
 
+
+    // Restaurant restaurants = new Restaurant;
     //private UUID restaurantId;
     public RestaurantService(RestaurantCrudService restaurantCrudService) {
         this.restaurantCrudService = restaurantCrudService;
@@ -49,7 +53,7 @@ public class RestaurantService {
 
     public void process() {
         Scanner read = new Scanner(System.in);
-        while (true) {// 'while' statement cannot complete without throwing an exception - instrukcja case
+        while (true) {
 
             System.out.println("Type \"exit\" to exit ");
             System.out.println("Type \"1\" to create restaurant ");
@@ -74,6 +78,7 @@ public class RestaurantService {
         System.out.println("Bye bye");
         System.exit(0);
     }
+
     public void addRestaurant(Scanner read) {
         RestaurantType[] restaurantTypes = RestaurantType.values();
 
@@ -103,7 +108,6 @@ public class RestaurantService {
         // var restaurant = restaurantCrudService.add(name, address, resolvedType);
         var restaurant = new Restaurant(restaurantId, name, address, type);
         restaurantsList.add(restaurant);
-
         // Resataurant information
         System.out.println("Restaurant created:");
         System.out.println("Restaurant id: " + restaurantId);
@@ -117,8 +121,7 @@ public class RestaurantService {
         try {
             RestaurantType.valueOf(consoleInputType);
             return true;
-        } catch (IllegalArgumentException e) { // Co znaczy e ?
-
+        } catch (IllegalArgumentException e) {
             return false;
         }
     }
@@ -128,8 +131,9 @@ public class RestaurantService {
             System.out.println("Restaurants list's is empty, you can't add meal");
             return;
         }
-        //UUID id = UUID.randomUUID();
         var mealId = UUID.randomUUID();
+        UUID restaurantId = UUID.randomUUID();
+        var pairId = UUID.randomUUID();
         System.out.print("Type meal name: ");
         var name = read.nextLine();
         System.out.print("Type meal price: ");
@@ -145,23 +149,14 @@ public class RestaurantService {
             var consoleInputId = read.nextLine();
             if (isValidRestaurantId(consoleInputId)) {
                 isIncorrectId =  false;
-               // id = UUID.fromString(consoleInputId);
+                restaurantId = UUID.fromString(consoleInputId);
             } else System.out.print("Type correct id: ");
         }
 
-        System.out.println("wpisalem poprawne id"); // dla mnie
-        var meal = new Meal(mealId, name, price);
-        // jak przypisac jedzenie do restauracji ?
+        var meal = new Meal(restaurantId, name, price);
         mealList.add(meal);
-        //mealList.forEach(meal2 -> System.out.println(meal.getMealId()));
-        // dlaczego ta instrukcja wypisuje tylko jedna wartosc?
+        //  idToMeal.put(restaurantId, meal);
     }
-
-    /*public List<Restaurant> restaurants () {
-        () -> Restaurant.
-
-        return Id;
-    }*/
 
     private boolean isValidRestaurantId(String consoleInputId) {
         try {
@@ -181,10 +176,19 @@ public class RestaurantService {
 
     public void showMeals(Scanner read) {
 
+        if (restaurantsList.isEmpty()) {
+            System.out.println("Restaurants list's is empty, you can't add meal");
+            return;
+        }
+        if (mealList.isEmpty()) {
+            System.out.println("Meals list is empty");
+            return;
+        }
+
         System.out.println("Restaurants id's: ");
         restaurantsList.forEach(restaurant -> System.out.println(restaurant.getRestaurantId()));
         System.out.print("Type restaurant id: ");
-        UUID id;
+        UUID id = UUID.randomUUID();
         var isIncorrectId = true;
         while (isIncorrectId) {
             var consoleInputId = read.nextLine();
@@ -194,31 +198,31 @@ public class RestaurantService {
             } else System.out.print("Type correct id: ");
         }
 
-        //var id = UUID.fromString(read.nextLine());
-        System.out.println("List meals of restaurant id: ");
-        mealList.forEach(meal -> System.out.println(meal));
-        System.out.println("lista restauracji ponownie w 4");
+        var a = id;
+        System.out.println(id);
+        System.out.println("All meals of restaurant id: ");
+        var i = 0;
+        for (Meal value : mealList) {
+            if (id.equals(mealList.get(i).getMealId())) {
+                System.out.println(mealList.get(i).getName());
+                System.out.println(mealList.get(i).getPrice());
+            }
+            i++;
+        }
+
+       /* if (mealList.contains(id)) {
+            System.out.println(mealList);
+        } else {
+        System.out.println("lista restauracji jest pusta");
         restaurantsList.forEach(restaurant -> System.out.println(restaurant.getRestaurantId()));
+    }*/
 
-
-        /*
-        //restaurantsList.toString(restaurant -> System.out.println(restaurant.getRestaurantId()));
-         var id2 = restaurantsList.stream()
-                .map(Restaurant::getRestaurantId)
-                .findAny(restaurantsList -> restaurantsList)
-
-                .findFirst(restaurantsList -> restaurantsList.getRestaurantId())
-                .flatMap(restaurantsList -> restaurantsList.getRestaurantId())
-                .anyMatch(restaurantList -> restaurantList.getRestaurantId());
-
-        //.flatMap(restaurantsList -> restaurantsList.getRestaurantId())
-
-                //.findM(restaurantsList -> restaurantsList.getRestaurantId())*/
-
-
-
+        /*if (mealList.contains(idToMeal.get(id))){
+            System.out.println(idToMeal);
+        } else {
+            // mealList.forEach(meal -> System.out.println(idToMeal));
+            System.out.println("lista restauracji jest pusta");
+            restaurantsList.forEach(restaurant -> System.out.println(restaurant.getRestaurantId()));
+        }*/
     }
 }
-
-// 1. Jak ograniczyc i zaokraglic float/double do dwoch miejsc po przecinku ?
-// 2. Co to za malpa z lewej strony ?

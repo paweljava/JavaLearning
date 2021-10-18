@@ -1,6 +1,5 @@
 package com.restaurant.model;
 
-import java.util.List;
 import java.util.UUID;
 
 public class Restaurant {
@@ -9,7 +8,6 @@ public class Restaurant {
     private String name;
     private String address;
     private RestaurantType type;
-    private List<Meal> mealList;
 
     public Restaurant(UUID restaurantId, String name, String address, RestaurantType type) {
         this.restaurantId = restaurantId;
@@ -42,7 +40,7 @@ public class Restaurant {
         System.out.println(type);
     };*/
 
-    @Override
+//    @Override
     public String toString() {
         return "Restaurant{" +
                 "id = " + restaurantId +
@@ -51,8 +49,6 @@ public class Restaurant {
                 ", type = " + type +
                 '}';
     }
-    public void metoda() {
-        System.out.println("cos");
-    }
+
 }
 
