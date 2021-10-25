@@ -4,27 +4,27 @@ import java.util.UUID;
 
 public class Meal {
     private UUID mealId = UUID.randomUUID();
-    private String name;
-    private float price;
+    private String mealName;
+    private float mealPrice;
 
-    public Meal (UUID mealId, String name, float price) {
+    public Meal (UUID mealId, String mealName, float mealPrice) {
         this.mealId = mealId;
-        this.name = name;
-        this.price = price;
+        this.mealName = mealName;
+        this.mealPrice = mealPrice;
     }
 
     public UUID getMealId() {return mealId;}
-    public String getName(){return name;}
-    public void setName(String name) {this.name = name;}
-    public float getPrice() {return price;}
-    public void setPrice(float price) {this.price = price;}
+    public String getMealName(){return mealName;}
+    public void setMealName(String mealName) {this.mealName = mealName;}
+    public float getMealPrice() {return mealPrice;}
+    public void setMealPrice(float mealPrice) {this.mealPrice = mealPrice;}
 
-    @Override
+    @Override // po co jest to nadpisywanie ?
     public String toString() {
         return "Meal{" +
                 "mealId=" + mealId +
-                ", name='" + name + '\'' +
-                ", price=" + price +
+                ", name='" + mealName + '\'' +
+                ", price=" + mealPrice +
                 '}';
     }
 

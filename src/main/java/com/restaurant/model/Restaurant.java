@@ -7,23 +7,23 @@ import java.util.UUID;
 public class Restaurant {
 
     private UUID restaurantId;
-    private String name;
-    private String address;
+    private String restaurantName;
+    private String restaurantAddress;
     private RestaurantType type;
     private List<Meal> mealList = new ArrayList<>();
 
 
-    public Restaurant(UUID restaurantId, String name, String address, RestaurantType type) {
+    public Restaurant(UUID restaurantId, String restaurantName, String restaurantAddress, RestaurantType type) {
         this.restaurantId = restaurantId;
-        this.name = name;
-        this.address = address;
+        this.restaurantName = restaurantName;
+        this.restaurantAddress = restaurantAddress;
         this.type = type;
     }
 
-    public Restaurant(UUID restaurantId, String name, String address, RestaurantType type, List<Meal> mealList) {
+    public Restaurant(UUID restaurantId, String restaurantName, String restaurantAddress, RestaurantType type, List<Meal> mealList) {
         this.restaurantId = restaurantId;
-        this.name = name;
-        this.address = address;
+        this.restaurantName = restaurantName;
+        this.restaurantAddress = restaurantAddress;
         this.type = type;
         this.mealList = mealList;
     }
@@ -32,12 +32,12 @@ public class Restaurant {
         return restaurantId;
     }
 
-    public String getName() {
-        return name;
+    public String getRestaurantName() {
+        return restaurantName;
     }
 
-    public String getAddress() {
-        return address;
+    public String getRestaurantAddress() {
+        return restaurantAddress;
     }
 
     public RestaurantType getType() {
@@ -55,8 +55,8 @@ public class Restaurant {
     public String toString() {
         return "Restaurant{" +
                 "id = " + restaurantId +
-                ", name = '" + name + '\'' +
-                ", address = '" + address + '\'' +
+                ", name = '" + restaurantName + '\'' +
+                ", address = '" + restaurantAddress + '\'' +
                 ", type = " + type +
                 '}';
     }
