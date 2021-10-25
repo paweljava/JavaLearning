@@ -13,18 +13,18 @@ public class RestaurantService {
      The restaurant should contain id, name, address, type, Meal should have name, price and id. Ids are assigned by the program during entity creation.
             For program execution use IntellIJ (run or debug program):
             At the beginning the program prints instructions, after each point user input is expected.
-            If you want to exit, type “exit”
-            If you want to create a restaurant, type “1”, if the user chooses this flow, then
+            If you want to exit, type exit
+            If you want to create a restaurant, type 1, if the user chooses this flow, then
             Type restaurant name
             Type restaurant address
             Type restaurant type[ASIAN, MEDITERRANEAN, FRENCH, AMERICAN, POLISH], nice to have - validation for those values
             Show restaurant information is added with the restaurant id(which may be important later)
-            If you want to add a meal to a restaurant, type “2”, if the user chooses this flow, then
+            If you want to add a meal to a restaurant, type 2, if the user chooses this flow, then
             Type meal name
             Type meal price
             Type restaurant id to add the meal to particular restaurant
-            If user types “3” Show all restaurants, if user chooses this flow, then all restaurants should be printed
-            If user types “4”,  shows all meals in a particular restaurant , if user chooses this flow, then
+            If user types 3 Show all restaurants, if user chooses this flow, then all restaurants should be printed
+            If user types 4,  shows all meals in a particular restaurant , if user chooses this flow, then
             Type restaurant id(should be shown in restaurant print), then all meals of a specific restaurant should be printed
     */
 
@@ -38,8 +38,8 @@ public class RestaurantService {
     //    c) jesli tak, kontynuujemy proces
     //  3. Robimy to
 
-    private final Set<Restaurant> restaurantsList = new HashSet<>(Set.of(new Restaurant(UUID.fromString("e7c3a6a0-1dda-4ea8-a555-64ccf10b347d"), "u grubego", "Warszawa", RestaurantType.ASIAN, List.of())));
-
+   // private final Set<Restaurant> restaurantsList = new HashSet<>(Set.of(new Restaurant(UUID.fromString("e7c3a6a0-1dda-4ea8-a555-64ccf10b347d"), "u grubego", "Warszawa", RestaurantType.ASIAN, List.of())));
+    private final Set<Restaurant> restaurantsList = new HashSet<>();
     private final RestaurantCrudService restaurantCrudService;
 
 
@@ -130,17 +130,20 @@ public class RestaurantService {
         }
 
         UUID restaurantId = UUID.randomUUID();
-
         System.out.print("Type meal name: ");
         var name = read.nextLine();
         System.out.print("Type meal price: ");
-        var price = read.nextFloat();
-
+       /* float price = 0;
+        try {
+            price = Float.parseFloat(read.nextLine());
+        } catch (InputMismatchException e) {
+            System.out.println("Type correct value");
+        }*/
+        var price = Float.parseFloat(read.nextLine());
         System.out.println("Available restaurants and id's: ");
         restaurantsList.forEach(restaurant -> System.out.println(restaurant));
         System.out.print("Type restaurant id to add the meal to particular restaurant: ");
 
-        // HOMEWORK - validate if uuid is correct, is assigned to restaurant and assign to requested restaurant
         var isIncorrectId = true;
         while (isIncorrectId) {
             var consoleInputId = read.nextLine();
@@ -150,22 +153,17 @@ public class RestaurantService {
             } else System.out.print("Type correct id: ");
         }
 
-
-        //mealList.add(meal);
         for (Restaurant restaurant : restaurantsList) {
             if (restaurant.getRestaurantId().equals(restaurantId)) {
                 var meal = new Meal(UUID.randomUUID(), name, price);
                 restaurant.getMealList().add(meal);
-            }
+            } else System.out.println("Nie dodalo posilku");
         }
-
-        //  idToMeal.put(restaurantId, meal);
     }
 
     private boolean isValidRestaurantId(String consoleInputId) {
         try {
             UUID.fromString(consoleInputId);// Result of 'UUID.fromString()' is ignored ?
-
             return true;
         } catch (IllegalArgumentException e) {
             return false;
@@ -173,15 +171,17 @@ public class RestaurantService {
     }
 
     public void showRestaurants() {
-        for (Restaurant restaurant : restaurantsList) {
-            System.out.println(restaurant);
-        }
+        if (!(restaurantsList.isEmpty())) {
+            for (Restaurant restaurant : restaurantsList) {
+                System.out.println(restaurant);
+            }
+        } else System.out.println("Restaurants list's is empty");
     }
 
     public void showMeals(Scanner read) {
 
         if (restaurantsList.isEmpty()) {
-            System.out.println("Restaurants list's is empty, you can't add meal");
+            System.out.println("Restaurants list's is empty");
             return;
         }
 
@@ -198,48 +198,16 @@ public class RestaurantService {
             } else System.out.print("Type correct id: ");
         }
 
-       /* var a = id;
-        System.out.println(id);
-        System.out.println("All meals of restaurant id: ");
-        var i = 0;
-        for (Meal value : mealList) {
-            if (id.equals(mealList.get(i).getMealId())) {
-                System.out.print(mealList.get(i).getName() + " - ");
-                System.out.println(mealList.get(i).getPrice());
-            }
-            i++;
-        }*/
-        var a = id;
-     //   var b = mealSet.contains(id);
-     //   var c = restaurantsList.contains(id);
-     /*   var d = mealvar.getMealId();
-        var e = restaurant.getRestaurantId();
-*/
-
-        System.out.println(id);
         System.out.println("All meals of restaurant id: ");
         var i = 0;
         for (Restaurant value : restaurantsList) {
-            if ((restaurantsList.contains(id)) || (restaurantsList.contains(id))) {
-          //      System.out.print(mealSet.get(i).getName() + " - ");
-          //      System.out.println(mealSetget(i).getPrice());
-            }
-            i++;
+            if ((value.getRestaurantId().equals(id)) && (!(value.getMealList().isEmpty()))){
+                for (Meal meal : value.getMealList()) {
+                    System.out.print(value.getMealList().get(i).getName() + " - ");
+                    System.out.println(value.getMealList().get(i).getPrice() + " zl");
+                    i++;
+                }
+            } else System.out.println("This restaurant have no meals!");
         }
-
-       /* if (mealList.contains(id)) {
-            System.out.println(mealList);
-        } else {
-        System.out.println("lista restauracji jest pusta");
-        restaurantsList.forEach(restaurant -> System.out.println(restaurant.getRestaurantId()));
-    }*/
-
-        /*if (mealList.contains(idToMeal.get(id))){
-            System.out.println(idToMeal);
-        } else {
-            // mealList.forEach(meal -> System.out.println(idToMeal));
-            System.out.println("lista restauracji jest pusta");
-            restaurantsList.forEach(restaurant -> System.out.println(restaurant.getRestaurantId()));
-        }*/
     }
 }
