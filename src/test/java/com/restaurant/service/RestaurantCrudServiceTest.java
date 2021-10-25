@@ -23,8 +23,8 @@ class RestaurantCrudServiceTest {
 
         // then
         var expected = new Restaurant(UUID.randomUUID(), name, address, restaurantType);
-        Assertions.assertEquals(expected.getName(), result.getName());
-        Assertions.assertEquals(expected.getAddress(), result.getAddress());
+        Assertions.assertEquals(expected.getRestaurantName(), result.getRestaurantName());
+        Assertions.assertEquals(expected.getRestaurantAddress(), result.getRestaurantAddress());
         Assertions.assertEquals(expected.getType(), result.getType());
     }
 }
