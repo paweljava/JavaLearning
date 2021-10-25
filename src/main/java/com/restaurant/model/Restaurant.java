@@ -1,5 +1,7 @@
 package com.restaurant.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class Restaurant {
@@ -8,6 +10,8 @@ public class Restaurant {
     private String name;
     private String address;
     private RestaurantType type;
+    private List<Meal> mealList = new ArrayList<>();
+
 
     public Restaurant(UUID restaurantId, String name, String address, RestaurantType type) {
         this.restaurantId = restaurantId;
@@ -16,6 +20,13 @@ public class Restaurant {
         this.type = type;
     }
 
+    public Restaurant(UUID restaurantId, String name, String address, RestaurantType type, List<Meal> mealList) {
+        this.restaurantId = restaurantId;
+        this.name = name;
+        this.address = address;
+        this.type = type;
+        this.mealList = mealList;
+    }
 
     public UUID getRestaurantId() {
         return restaurantId;
@@ -50,5 +61,12 @@ public class Restaurant {
                 '}';
     }
 
+    public List<Meal> getMealList() {
+        return mealList;
+    }
+
+    public void setMealList(List<Meal> mealList) {
+        this.mealList = mealList;
+    }
 }
 

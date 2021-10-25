@@ -3,7 +3,7 @@ package com.restaurant.model;
 import java.util.UUID;
 
 public class Meal {
-    private UUID mealId;
+    private UUID mealId = UUID.randomUUID();
     private String name;
     private float price;
 

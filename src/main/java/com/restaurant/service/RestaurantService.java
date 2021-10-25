@@ -38,15 +38,12 @@ public class RestaurantService {
     //    c) jesli tak, kontynuujemy proces
     //  3. Robimy to
 
-    private final List<Restaurant> restaurantsList = new ArrayList<>(List.of());
-    private final List<Meal> mealList = new ArrayList<>(List.of());
-    //  private Map<UUID, Meal> idToMeal = new HashMap<>();
-    private Set<String> abc = new HashSet<>();
+    private final Set<Restaurant> restaurantsList = new HashSet<>(Set.of(new Restaurant(UUID.fromString("e7c3a6a0-1dda-4ea8-a555-64ccf10b347d"), "u grubego", "Warszawa", RestaurantType.ASIAN, List.of())));
+
     private final RestaurantCrudService restaurantCrudService;
 
 
-    // Restaurant restaurants = new Restaurant;
-    //private UUID restaurantId;
+
     public RestaurantService(RestaurantCrudService restaurantCrudService) {
         this.restaurantCrudService = restaurantCrudService;
     }
@@ -131,9 +128,9 @@ public class RestaurantService {
             System.out.println("Restaurants list's is empty, you can't add meal");
             return;
         }
-        var mealId = UUID.randomUUID();
+
         UUID restaurantId = UUID.randomUUID();
-        var pairId = UUID.randomUUID();
+
         System.out.print("Type meal name: ");
         var name = read.nextLine();
         System.out.print("Type meal price: ");
@@ -153,8 +150,15 @@ public class RestaurantService {
             } else System.out.print("Type correct id: ");
         }
 
-        var meal = new Meal(restaurantId, name, price);
-        mealList.add(meal);
+
+        //mealList.add(meal);
+        for (Restaurant restaurant : restaurantsList) {
+            if (restaurant.getRestaurantId().equals(restaurantId)) {
+                var meal = new Meal(UUID.randomUUID(), name, price);
+                restaurant.getMealList().add(meal);
+            }
+        }
+
         //  idToMeal.put(restaurantId, meal);
     }
 
@@ -180,10 +184,6 @@ public class RestaurantService {
             System.out.println("Restaurants list's is empty, you can't add meal");
             return;
         }
-        if (mealList.isEmpty()) {
-            System.out.println("Meals list is empty");
-            return;
-        }
 
         System.out.println("Restaurants id's: ");
         restaurantsList.forEach(restaurant -> System.out.println(restaurant.getRestaurantId()));
@@ -198,14 +198,31 @@ public class RestaurantService {
             } else System.out.print("Type correct id: ");
         }
 
-        var a = id;
+       /* var a = id;
         System.out.println(id);
         System.out.println("All meals of restaurant id: ");
         var i = 0;
         for (Meal value : mealList) {
             if (id.equals(mealList.get(i).getMealId())) {
-                System.out.println(mealList.get(i).getName());
+                System.out.print(mealList.get(i).getName() + " - ");
                 System.out.println(mealList.get(i).getPrice());
+            }
+            i++;
+        }*/
+        var a = id;
+     //   var b = mealSet.contains(id);
+     //   var c = restaurantsList.contains(id);
+     /*   var d = mealvar.getMealId();
+        var e = restaurant.getRestaurantId();
+*/
+
+        System.out.println(id);
+        System.out.println("All meals of restaurant id: ");
+        var i = 0;
+        for (Restaurant value : restaurantsList) {
+            if ((restaurantsList.contains(id)) || (restaurantsList.contains(id))) {
+          //      System.out.print(mealSet.get(i).getName() + " - ");
+          //      System.out.println(mealSetget(i).getPrice());
             }
             i++;
         }
