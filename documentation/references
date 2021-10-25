@@ -49,3 +49,17 @@ https://www.javacodegeeks.com/2019/05/5-refactoring-principles-example.html
 
 Task:
 Finish everything from previous references
+
+lesson 5:
+https://medium.com/javascript-scene/testing-software-what-is-tdd-459b2145405c#:~:text=Test%20Driven%20Development%20is%20a,to%20make%20the%20test%20pass.
+https://medium.com/javascript-scene/tdd-changed-my-life-5af0ce099f80
+https://softwareengineering.stackexchange.com/questions/274562/how-to-use-unit-tests-when-using-bdd
+https://www.atlassian.com/continuous-delivery/software-testing/types-of-software-testing
+https://www.tutorialspoint.com/mockito/index.htm
+https://www.journaldev.com/20834/junit5-tutorial
+https://junit.org/junit5/docs/current/user-guide/
+
+
+Task:
+Create mockito package in this project and proceed with mockito tutorial
+Create junit package in this project and proceed with junit tutorial
