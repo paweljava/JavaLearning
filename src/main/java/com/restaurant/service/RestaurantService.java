@@ -3,7 +3,6 @@ package com.restaurant.service;
 import com.restaurant.model.Meal;
 import com.restaurant.model.Restaurant;
 import com.restaurant.model.RestaurantType;
-
 import java.util.*;
 
 public class RestaurantService {
@@ -47,7 +46,7 @@ public class RestaurantService {
     }
 
     public void process() {
-        Scanner read = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         while (true) {
 
             System.out.println("Type \"exit\" to exit ");
@@ -56,14 +55,14 @@ public class RestaurantService {
             System.out.println("Type \"3\" to show all restaurants");
             System.out.println("Type \"4\" to show all meals in a particular restaurant");
             System.out.print("What is yours choose: ");
-            String choose = read.nextLine();
+            String choose = scanner.nextLine();
 
             switch (choose) {
                 case "exit" -> exit();
-                case "1" -> addRestaurant(read);
-                case "2" -> addMeal(read);
+                case "1" -> addRestaurant(scanner);
+                case "2" -> addMeal(scanner);
                 case "3" -> showRestaurants();
-                case "4" -> showMeals(read);
+                case "4" -> showMeals(scanner);
                 default -> System.out.println("Type correct value!");
             }
         }
@@ -82,12 +81,13 @@ public class RestaurantService {
         var restaurantName = read.nextLine();
         System.out.print("Type restaurant address: ");
         var restaurantAddress = read.nextLine();
-        RestaurantType type = RestaurantType.ASIAN;// RestaurantType type; Jak nie inicjalizowac nulla ?
+        //RestaurantType type = RestaurantType.ASIAN;// RestaurantType type; Jak nie inicjalizowac nulla ?
 
         // Validation
         // Creation
         // var restaurant = restaurantCrudService.add(name, address, resolvedType);
-        var restaurant = new Restaurant(restaurantId, restaurantName, restaurantAddress, type = typeValidation(read, restaurantTypes, type));
+        var type = typeValidation(read, restaurantTypes);
+        var restaurant = new Restaurant(restaurantId, restaurantName, restaurantAddress, type);
         restaurantsList.add(restaurant);
         // Resataurant information
         System.out.println("Restaurant created:");
@@ -98,21 +98,18 @@ public class RestaurantService {
         System.out.println();
     }
 
-    private RestaurantType typeValidation(Scanner read, RestaurantType[] restaurantTypes, RestaurantType type) {
-        var isIncorrectType = true;
-        while (isIncorrectType) {
+    private RestaurantType typeValidation(Scanner read, RestaurantType[] restaurantTypes) {
+        while (true) {
             System.out.print("Type restaurant type. Available types: ");
             for (RestaurantType k : restaurantTypes) {
                 System.out.print(k.name() + " ");
             }
-            var consoleInputType = read.nextLine().toUpperCase(Locale.ROOT); // Co robi (Locale.ROOT) ?
+            var consoleInputType = read.nextLine().toUpperCase(Locale.ROOT);
             if (isValidRestaurantType(consoleInputType)) {
-                isIncorrectType = false;
-                type = RestaurantType.valueOf(consoleInputType);
+                return RestaurantType.valueOf(consoleInputType);
                 //resolvedType = RestaurantType.valueOf(consoleInputType);
             }
         }
-        return type;
     }
 
     private boolean isValidRestaurantType(String consoleInputType) {
