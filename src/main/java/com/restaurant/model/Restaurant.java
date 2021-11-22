@@ -13,6 +13,11 @@ public class Restaurant {
     private List<Meal> mealList = new ArrayList<>();
 
 
+    public Restaurant(String restaurantName, String restaurantAddress, RestaurantType type) {
+        this.restaurantName = restaurantName;
+        this.restaurantAddress = restaurantAddress;
+        this.type = type;
+    }
     public Restaurant(UUID restaurantId, String restaurantName, String restaurantAddress, RestaurantType type) {
         this.restaurantId = restaurantId;
         this.restaurantName = restaurantName;
@@ -26,6 +31,18 @@ public class Restaurant {
         this.restaurantAddress = restaurantAddress;
         this.type = type;
         this.mealList = mealList;
+    }
+
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
+    }
+
+    public void setRestaurantAddress(String restaurantAddress) {
+        this.restaurantAddress = restaurantAddress;
+    }
+
+    public void setType(RestaurantType type) {
+        this.type = type;
     }
 
     public UUID getRestaurantId() {
