@@ -3,10 +3,7 @@ package com.restaurant.service;
 import com.restaurant.model.Restaurant;
 import com.restaurant.model.RestaurantType;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 
 //CRUD
 //Create
@@ -16,15 +13,15 @@ import java.util.UUID;
 // HOMEWORK Complete CRUD operations
 public class RestaurantCrudService {
 
-    public RestaurantCrudService(List<Restaurant> restaurants){
+    public RestaurantCrudService(Set<Restaurant> restaurants){
         this.restaurantsList = restaurants;
     }
 
     public RestaurantCrudService() {
-        this.restaurantsList = new ArrayList<>(List.of());
+        this.restaurantsList = new HashSet<>(List.of());
     }
+    private final Set<Restaurant> restaurantsList;
 
-    private final List<Restaurant> restaurantsList;
     // Create
     public Restaurant add (String name, String address, RestaurantType restaurantType) {
         final var restaurant = new Restaurant(UUID.randomUUID(), name, address, restaurantType);
@@ -33,39 +30,27 @@ public class RestaurantCrudService {
     }
 
     // Read
-    public List<Restaurant> getAllRestaurants () {
+    public Set<Restaurant> getAllRestaurants () {
         return restaurantsList;
     }
 
     // Update (only address is possible to change)
-    public Restaurant update () {
-        var id = UUID.randomUUID();
-        Restaurant restaurantupdated;
-        //var restaurant = restaurantsList.set(0, new Restaurant(UUID.randomUUID(), name, address, restaurantType));
-        var i=0;
+    public void update (UUID id, String newRestaurantAddress) {
         for (Restaurant restaurant : restaurantsList) {
             if (restaurant.getRestaurantId().equals(id)) {
-                //restaurantupdated = cos tu trzeba wpisac;
+                var newRestaurant = restaurant; //Local variable 'newRestaurant' is redundant ? Dlaczego taka podpowiedz
+                restaurantsList.remove(restaurant);
+                restaurantsList.add(new Restaurant(newRestaurant.getRestaurantId(), newRestaurant.getRestaurantName(), newRestaurantAddress, newRestaurant.getType()));
             }
-            updateaddress = restaurantsList.get(1).getRestaurantAddress();
         }
-        return restaurantupdated;
     }
 
     // Delete
-    public void delete () {
-        var id = UUID.randomUUID();
+    public void delete (UUID id) {
         for (Restaurant restaurant : restaurantsList) {
             if (restaurant.getRestaurantId().equals(id)) {
-                restaurantsList.
-            };
+                restaurantsList.remove(restaurant);
+            }
         }
-
-        //var restaurant = restaurantsList.set(0, new Restaurant(UUID.randomUUID(), name, address, restaurantType));
-        //var restaurant = restaurantsList.get(1).
-
-        return;
-
     }
-
 }

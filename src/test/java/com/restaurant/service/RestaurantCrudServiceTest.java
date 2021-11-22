@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,7 +20,7 @@ class RestaurantCrudServiceTest {
         var restaurant = new Restaurant(UUID.randomUUID(), "u czarnego", "sosnowa" , POLISH);
         var restaurant2 = new Restaurant(UUID.randomUUID(), "u bialego", "lesna" , FRENCH);
         var restaurant3 = new Restaurant(UUID.randomUUID(), "u zielonego", "ogrodowa" , AMERICAN);
-        restaurantCrudService = new RestaurantCrudService(new ArrayList<>(List.of(restaurant, restaurant2, restaurant3)));
+        restaurantCrudService = new RestaurantCrudService(new HashSet<>(List.of(restaurant, restaurant2, restaurant3)));
     }
 
     @Test
