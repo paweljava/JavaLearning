@@ -35,22 +35,29 @@ public class RestaurantCrudService {
     }
 
     // Update (only address is possible to change)
-    public void update (UUID id, String newRestaurantAddress) {
+    public Restaurant update (String restaurantName, String newRestaurantAddress) {
+        Restaurant newRestaurant = new Restaurant(UUID.randomUUID(), "Hello", "World", RestaurantType.ASIAN);
         for (Restaurant restaurant : restaurantsList) {
-            if (restaurant.getRestaurantId().equals(id)) {
-                var newRestaurant = restaurant; //Local variable 'newRestaurant' is redundant ? Dlaczego taka podpowiedz
+            if (restaurant.getRestaurantName().equals(restaurantName)) {
+                newRestaurant = new Restaurant(restaurant.getRestaurantId(), restaurant.getRestaurantName(), newRestaurantAddress, restaurant.getType());
                 restaurantsList.remove(restaurant);
-                restaurantsList.add(new Restaurant(newRestaurant.getRestaurantId(), newRestaurant.getRestaurantName(), newRestaurantAddress, newRestaurant.getType()));
+                restaurantsList.add(newRestaurant);
+                System.out.println(newRestaurant);
+                return newRestaurant;
             }
         }
+        return newRestaurant;
     }
 
     // Delete
-    public void delete (UUID id) {
+    public Boolean delete (String name) {
         for (Restaurant restaurant : restaurantsList) {
-            if (restaurant.getRestaurantId().equals(id)) {
+            if (restaurant.getRestaurantName().equals(name)) {
                 restaurantsList.remove(restaurant);
+                System.out.println("Restaurant deleted");
+                return true;
             }
         }
+        return false;
     }
 }

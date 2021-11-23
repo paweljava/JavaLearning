@@ -81,14 +81,12 @@ public class RestaurantService {
         var restaurantName = read.nextLine();
         System.out.print("Type restaurant address: ");
         var restaurantAddress = read.nextLine();
-        //RestaurantType type = RestaurantType.ASIAN;// RestaurantType type; Jak nie inicjalizowac nulla ?
 
-        // Validation
         // Creation
-        // var restaurant = restaurantCrudService.add(name, address, resolvedType);
         var type = typeValidation(read, restaurantTypes);
         var restaurant = new Restaurant(restaurantId, restaurantName, restaurantAddress, type);
         restaurantsList.add(restaurant);
+
         // Resataurant information
         System.out.println("Restaurant created:");
         System.out.println("Restaurant id: " + restaurantId);
@@ -134,8 +132,6 @@ public class RestaurantService {
         restaurantsList.forEach(restaurant -> System.out.println(restaurant));
         System.out.print("Type restaurant id to add the meal to particular restaurant: ");
 
-       // restaurantId = correctId(read, restaurantId);
-
         for (Restaurant restaurant : restaurantsList) {
             if (restaurant.getRestaurantId().equals(restaurantId = correctId(read, restaurantId))) {
                 var meal = new Meal(UUID.randomUUID(), name, price);
@@ -175,11 +171,11 @@ public class RestaurantService {
 
     private boolean isValidPrice(String consoleInputFloat) {
         try {
-        Float.parseFloat(consoleInputFloat);
-        return true;
+            Float.parseFloat(consoleInputFloat);
+            return true;
     }   catch (NumberFormatException e) {
-        System.out.println("Type correct value");
-        return false;
+            System.out.println("Type correct value");
+            return false;
         }
     }
 
