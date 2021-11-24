@@ -68,3 +68,29 @@ https://howtodoinjava.com/junit-5-tutorial/
 Task:
 Create mockito package in this project and proceed with mockito tutorial
 Create junit package in this project and proceed with junit tutorial
+
+Lesson 24.11.12
+References:
+https://stormit.pl/immutable-niezmienne-obiekty/
+https://stormit.pl/idempotent/
+https://www.thoughtworks.com/insights/blog/composition-vs-inheritance-how-choose#:~:text=Inheritance%3A%20a%20class%20may%20inherit,and%20methods%20of%20its%20superclass.&text=Composition%3A%20when%20a%20Field's%20type,an%20association%20relationship%20between%20them
+https://www.kodolamacz.pl/blog/mniej-grafomanii-w-javie/
+http://tutorials.jenkov.com/java-exception-handling/index.html
+
+Tasks:
+- Please create for this a new package and proceed with tutorial - https://www.tutorialspoint.com/mockito/index.htm
+- Finish current implementation and cover EmailAppConsumer with tests
+
+Just in case - the task extension(not mandatory to even start)
+Task:
+- New structure
+a) Company has multiple departments,
+b) App has multiple companies,
+c) In the company we can have regular workers and managers, manager has information about his regular workers, regular workers have information about manager
+- New requirements:
+a) Add new company, it should have name, departments, id, website link,
+b) Add a new department, it should have a name, employees, budget and should belong to a specific company,
+c) Add new regular workers to specific companies and specific departments, no limitations,
+d) Add new manager to specific company and specific department, in the department can be only 1 manager per 10 regular workers, initially let's assume manager
+doesn't have any workers,
+e) Add new regular workers to specific companies, departments and managers, there can't be a regular worker without a manager
