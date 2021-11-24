@@ -36,28 +36,25 @@ public class RestaurantCrudService {
 
     // Update (only address is possible to change)
     public Restaurant update (String restaurantName, String newRestaurantAddress) {
-        Restaurant newRestaurant = new Restaurant(UUID.randomUUID(), "Hello", "World", RestaurantType.ASIAN);
-        for (Restaurant restaurant : restaurantsList) {
+        for (final var restaurant : restaurantsList) {
             if (restaurant.getRestaurantName().equals(restaurantName)) {
-                newRestaurant = new Restaurant(restaurant.getRestaurantId(), restaurant.getRestaurantName(), newRestaurantAddress, restaurant.getType());
-                restaurantsList.remove(restaurant);
+                final var newRestaurant = new Restaurant(restaurant.getRestaurantId(), restaurant.getRestaurantName(), newRestaurantAddress, restaurant.getType());
                 restaurantsList.add(newRestaurant);
-                System.out.println(newRestaurant);
+                System.out.println("Restaurant updated");
                 return newRestaurant;
             }
         }
-        return newRestaurant;
+        throw new IllegalStateException();
     }
 
     // Delete
-    public Boolean delete (String name) {
+    public void delete (String name) {
         for (Restaurant restaurant : restaurantsList) {
             if (restaurant.getRestaurantName().equals(name)) {
                 restaurantsList.remove(restaurant);
                 System.out.println("Restaurant deleted");
-                return true;
             }
         }
-        return false;
+        throw new IllegalStateException();
     }
 }

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.restaurant.model.RestaurantType.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 class RestaurantCrudServiceTest {
 
@@ -17,9 +18,9 @@ class RestaurantCrudServiceTest {
 
     @BeforeEach
     void setUp() {
-        var restaurant = new Restaurant(UUID.randomUUID(), "U Czarnego", "Sosnowa" , POLISH);
-        var restaurant2 = new Restaurant(UUID.randomUUID(), "U Bialego", "Lesna" , FRENCH);
-        var restaurant3 = new Restaurant(UUID.randomUUID(), "U Zielonego", "Ogrodowa" , AMERICAN);
+        var restaurant = new Restaurant(UUID.randomUUID(), "U Czarnego", "Sosnowa", POLISH);
+        var restaurant2 = new Restaurant(UUID.randomUUID(), "U Bialego", "Lesna", FRENCH);
+        var restaurant3 = new Restaurant(UUID.randomUUID(), "U Zielonego", "Ogrodowa", AMERICAN);
         restaurantCrudService = new RestaurantCrudService(new HashSet<>(List.of(restaurant, restaurant2, restaurant3)));
     }
 
@@ -33,16 +34,16 @@ class RestaurantCrudServiceTest {
         var result = restaurantCrudService.add(name, address, restaurantType);
         // then
         var expected = new Restaurant(UUID.randomUUID(), name, address, restaurantType);
-        Assertions.assertEquals(expected.getRestaurantName(), result.getRestaurantName());
-        Assertions.assertEquals(expected.getRestaurantAddress(), result.getRestaurantAddress());
-        Assertions.assertEquals(expected.getType(), result.getType());
+        assertEquals(expected.getRestaurantName(), result.getRestaurantName());
+        assertEquals(expected.getRestaurantAddress(), result.getRestaurantAddress());
+        assertEquals(expected.getType(), result.getType());
     }
 
     @Test
     void read() {
         // given
         // when
-        var result = restaurantCrudService. getAllRestaurants();
+        var result = restaurantCrudService.getAllRestaurants();
         // then
         Assertions.assertFalse(result.isEmpty());
     }
@@ -58,20 +59,41 @@ class RestaurantCrudServiceTest {
         var expected = new Restaurant(result.getRestaurantId(), result.getRestaurantName(), newAddress, result.getType());
         // Assertions.assertSame(expected, result);
         // Assertions.assertEquals(expected, result);
-        Assertions.assertEquals(expected.getRestaurantId(), result.getRestaurantId());
-        Assertions.assertEquals(expected.getRestaurantName(), result.getRestaurantName());
-        Assertions.assertEquals(newAddress, result.getRestaurantAddress());
-        Assertions.assertEquals(expected.getType(), result.getType());
+        assertEquals(expected.getRestaurantId(), result.getRestaurantId());
+        assertEquals(expected.getRestaurantName(), result.getRestaurantName());
+        assertEquals(newAddress, result.getRestaurantAddress());
+        assertEquals(expected.getType(), result.getType());
     }
+
+    @Test
+    void should_throw_exception_when_no_restaurant_found() {
+        // given
+        String name = "U Szarego";
+        String newAddress = "Wesola 7";
+
+        // when
+        // then
+        assertThrows(IllegalStateException.class, () -> restaurantCrudService.update(name, newAddress));
+    }
+
 
     @Test
     void delete() {
         // given
         String name = "U Bialego";
+
         // when
-        var result = restaurantCrudService.delete(name);
         // then
-        var expected = true;
-        Assertions.assertTrue(result);
+        assertDoesNotThrow(() -> restaurantCrudService.delete(name));
+    }
+
+    @Test
+    void should_not_delete_and_throw_exception_when_no_restaurant_found() {
+        // given
+        String name = "Bialego";
+
+        // when
+        // then
+        assertThrows(IllegalStateException.class, () -> restaurantCrudService.delete(name));
     }
 }
