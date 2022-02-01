@@ -18,6 +18,7 @@ public class Restaurant {
         this.restaurantAddress = restaurantAddress;
         this.type = type;
     }
+
     public Restaurant(UUID restaurantId, String restaurantName, String restaurantAddress, RestaurantType type) {
         this.restaurantId = restaurantId;
         this.restaurantName = restaurantName;
@@ -68,7 +69,7 @@ public class Restaurant {
         System.out.println(type);
     };*/
 
-//    @Override
+    //    @Override
     public String toString() {
         return "Restaurant{" +
                 "id = " + restaurantId +

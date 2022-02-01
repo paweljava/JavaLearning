@@ -3,7 +3,10 @@ package com.restaurant.service;
 import com.restaurant.model.Meal;
 import com.restaurant.model.Restaurant;
 import com.restaurant.model.RestaurantType;
-import java.util.*;
+
+import java.util.Locale;
+import java.util.Scanner;
+import java.util.UUID;
 
 public class RestaurantService {
 
@@ -38,12 +41,15 @@ public class RestaurantService {
     //  3. Robimy to
 
     // private final Set<Restaurant> restaurantsList = new HashSet<>(Set.of(new Restaurant(UUID.fromString("e7c3a6a0-1dda-4ea8-a555-64ccf10b347d"), "u grubego", "Warszawa", RestaurantType.ASIAN, List.of())));
-    private final Set<Restaurant> restaurantsList = new HashSet<>();
-    private final RestaurantCrudService restaurantCrudService;
 
-    public RestaurantService(RestaurantCrudService restaurantCrudService) {
-        this.restaurantCrudService = restaurantCrudService;
+    private final RestaurantRepository restaurantRepository;
+
+    public RestaurantService(RestaurantRepository restaurantRepository, RestaurantInputValidator restaurantInputValidator) {
+        this.restaurantRepository = restaurantRepository;
+        this.restaurantInputValidator = restaurantInputValidator;
     }
+
+    private final RestaurantInputValidator restaurantInputValidator;
 
     public void process() {
         Scanner scanner = new Scanner(System.in);
@@ -60,9 +66,9 @@ public class RestaurantService {
             switch (choose) {
                 case "exit" -> exit();
                 case "1" -> addRestaurant(scanner);
-                case "2" -> addMeal(scanner);
+                case "2" -> addMeal();
                 case "3" -> showRestaurants();
-                case "4" -> showMeals(scanner);
+                case "4" -> showMeals();
                 default -> System.out.println("Type correct value!");
             }
         }
@@ -85,7 +91,7 @@ public class RestaurantService {
         // Creation
         var type = typeValidation(read, restaurantTypes);
         var restaurant = new Restaurant(restaurantId, restaurantName, restaurantAddress, type);
-        restaurantsList.add(restaurant);
+        restaurantRepository.getAllRestaurants().add(restaurant);
 
         // Resataurant information
         System.out.println("Restaurant created:");
@@ -119,94 +125,55 @@ public class RestaurantService {
         }
     }
 
-    public void addMeal(Scanner read) {
-        if (restaurantListIsEmpty("Restaurants list's is empty, you can't add meal")) return;
+    public void addMeal() {
+        if (restaurantRepository.isRestaurantListEmpty()) {
+            System.out.println("Restaurants list's is empty, you can't add meal");
+            return;
+        }
 
         UUID restaurantId = UUID.randomUUID();
         System.out.print("Type meal name: ");
-        var name = read.nextLine();
+        var name = restaurantInputValidator.readLine();
         System.out.print("Type meal price: ");
-        var price = getCorrectPrice(read);
+        var price = restaurantInputValidator.getCorrectPrice();
         //var price = Float.parseFloat(read.nextLine());
         System.out.println("Available restaurants and id's: ");
-        restaurantsList.forEach(restaurant -> System.out.println(restaurant));
+        restaurantRepository.getAllRestaurants().forEach(restaurant -> System.out.println(restaurant));
         System.out.print("Type restaurant id to add the meal to particular restaurant: ");
 
-        for (Restaurant restaurant : restaurantsList) {
-            if (restaurant.getRestaurantId().equals(restaurantId = correctId(read, restaurantId))) {
+        for (Restaurant restaurant : restaurantRepository.getAllRestaurants()) {
+            if (restaurant.getRestaurantId().equals(restaurantInputValidator.correctId(UUID.fromString(restaurantInputValidator.readLine())))) {
                 var meal = new Meal(UUID.randomUUID(), name, price);
                 restaurant.getMealList().add(meal);
             } else System.out.println("Nie dodalo posilku");
         }
     }
 
-    private float getCorrectPrice(Scanner read) {
-        while (true) {
-            var consoleInput = read.nextLine();
-            if (isValidPrice(consoleInput)) {
-                return Float.parseFloat(consoleInput);
-            }
-        }
-    }
-
-    private boolean restaurantListIsEmpty(String s) {
-        if (restaurantsList.isEmpty()) {
-            System.out.println(s);
-            return true;
-        }
-        return false;
-    }
-
-    private UUID correctId(Scanner read, UUID restaurantId) {
-        var isIncorrectId = true;
-        while (isIncorrectId) {
-            var consoleInputId = read.nextLine();
-            if (isValidRestaurantId(consoleInputId)) {
-                isIncorrectId = false;
-                restaurantId = UUID.fromString(consoleInputId);
-            } else System.out.print("Type correct id: ");
-        }
-        return restaurantId;
-    }
-
-    private boolean isValidPrice(String consoleInputFloat) {
-        try {
-            Float.parseFloat(consoleInputFloat);
-            return true;
-    }   catch (NumberFormatException e) {
-            System.out.println("Type correct value");
-            return false;
-        }
-    }
-
-    private boolean isValidRestaurantId(String consoleInputId) {
-        try {
-            UUID.fromString(consoleInputId);// Result of 'UUID.fromString()' is ignored ?
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
-    }
-
     public void showRestaurants() {
-        if (restaurantListIsEmpty("Restaurants list's is empty")) return;
-        for (Restaurant restaurant : restaurantsList) {
-                System.out.println(restaurant);
+        if (restaurantRepository.isRestaurantListEmpty()) {
+            System.out.println("Restaurants list's is empty");
+            return;
+        }
+        for (Restaurant restaurant : restaurantRepository.getAllRestaurants()) {
+            System.out.println(restaurant);
         }
     }
 
-    public void showMeals(Scanner read) {
-        if (restaurantListIsEmpty("Restaurants list's is empty")) return;
+    public void showMeals() {
+        if (restaurantRepository.isRestaurantListEmpty()) {
+            System.out.println("Restaurants list's is empty");
+            return;
+        }
         System.out.println("Restaurants id's: ");
-        restaurantsList.forEach(restaurant -> System.out.println(restaurant.getRestaurantId()));
+        restaurantRepository.getAllRestaurants().forEach(restaurant -> System.out.println(restaurant.getRestaurantId()));
         System.out.print("Type restaurant id: ");
         UUID id = UUID.randomUUID();
-        id = correctId(read, id);
+        id = restaurantInputValidator.correctId(id);
         System.out.println("All meals of restaurant id: ");
 
         var i = 0;
-        for (Restaurant value : restaurantsList) {
-            if ((value.getRestaurantId().equals(id)) && (!(value.getMealList().isEmpty()))){
+        for (Restaurant value : restaurantRepository.getAllRestaurants()) {
+            if ((value.getRestaurantId().equals(id)) && (!(value.getMealList().isEmpty()))) {
                 for (Meal meal : value.getMealList()) {
                     System.out.print(value.getMealList().get(i).getMealName() + " - ");
                     System.out.println(value.getMealList().get(i).getMealPrice() + " zl");
@@ -214,5 +181,13 @@ public class RestaurantService {
                 }
             } else System.out.println("This restaurant have no meals!");
         }
+    }
+
+    //  Metoda ma zmieniac name i type jesli restauracja istnieje w pamieci a jesli nie to ma byc wyrzucony wyjatek
+    //  2 scenariusze
+    // 1. Jesli restauracja istnieje
+    // 2. Jesli restauracja nie istnieje
+    public void editRestaurant(UUID restaurantId, String name, RestaurantType type) {
+
     }
 }
