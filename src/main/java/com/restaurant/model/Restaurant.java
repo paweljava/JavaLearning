@@ -6,75 +6,69 @@ import java.util.UUID;
 
 public class Restaurant {
 
-    private UUID restaurantId;
-    private String restaurantName;
-    private String restaurantAddress;
+    private UUID id;
+    private String name;
+    private String address;
     private RestaurantType type;
     private List<Meal> mealList = new ArrayList<>();
 
 
     public Restaurant(String restaurantName, String restaurantAddress, RestaurantType type) {
-        this.restaurantName = restaurantName;
-        this.restaurantAddress = restaurantAddress;
+        this.id = UUID.randomUUID();
+        this.name = restaurantName;
+        this.address = restaurantAddress;
         this.type = type;
     }
 
     public Restaurant(UUID restaurantId, String restaurantName, String restaurantAddress, RestaurantType type) {
-        this.restaurantId = restaurantId;
-        this.restaurantName = restaurantName;
-        this.restaurantAddress = restaurantAddress;
+        this.id = restaurantId;
+        this.name = restaurantName;
+        this.address = restaurantAddress;
         this.type = type;
     }
 
     public Restaurant(UUID restaurantId, String restaurantName, String restaurantAddress, RestaurantType type, List<Meal> mealList) {
-        this.restaurantId = restaurantId;
-        this.restaurantName = restaurantName;
-        this.restaurantAddress = restaurantAddress;
+        this.id = restaurantId;
+        this.name = restaurantName;
+        this.address = restaurantAddress;
         this.type = type;
         this.mealList = mealList;
     }
 
-    public void setRestaurantName(String restaurantName) {
-        this.restaurantName = restaurantName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setRestaurantAddress(String restaurantAddress) {
-        this.restaurantAddress = restaurantAddress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public void setType(RestaurantType type) {
         this.type = type;
     }
 
-    public UUID getRestaurantId() {
-        return restaurantId;
+    public UUID getId() {
+        return id;
     }
 
-    public String getRestaurantName() {
-        return restaurantName;
+    public String getName() {
+        return name;
     }
 
-    public String getRestaurantAddress() {
-        return restaurantAddress;
+    public String getAddress() {
+        return address;
     }
 
     public RestaurantType getType() {
         return type;
     }
 
- /*   public void displayRestaurant() {
-        System.out.print(restaurantId + " ");
-        System.out.print(name + " ");
-        System.out.print(address + " ");
-        System.out.println(type);
-    };*/
-
     //    @Override
     public String toString() {
         return "Restaurant{" +
-                "id = " + restaurantId +
-                ", name = '" + restaurantName + '\'' +
-                ", address = '" + restaurantAddress + '\'' +
+                "id = " + id +
+                ", name = '" + name + '\'' +
+                ", address = '" + address + '\'' +
                 ", type = " + type +
                 '}';
     }

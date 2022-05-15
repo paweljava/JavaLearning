@@ -1,6 +1,5 @@
 package com.restaurant.service;
 
-import com.restaurant.model.Restaurant;
 import com.restaurant.model.RestaurantType;
 
 import java.util.Locale;
@@ -11,28 +10,29 @@ public class RestaurantInputValidator {
 
     private final Scanner scanner = new Scanner(System.in);
 
-    public Restaurant inputRestaurantData(String name, String address, RestaurantType restaurantType) {
+/*
+    public Restaurant inputRestaurantData( String name, String address, RestaurantType restaurantType) {
         RestaurantType[] restaurantTypes = RestaurantType.values();
-        Scanner read = new Scanner(System.in);
+        final var read = new Scanner(System.in);
         System.out.print("Type restaurant name: ");
         name = read.nextLine();
         System.out.print("Type restaurant address: ");
         address = read.nextLine();
-        var type = typeValidation(read, restaurantTypes);
-        var restaurantValidated = new Restaurant(name, address, type);
+        final var type = typeValidation(read, restaurantTypes);
+        final var restaurantValidated = new Restaurant(name, address, type);
         return (restaurantValidated);
     }
+*/
 
     private RestaurantType typeValidation(Scanner read, RestaurantType[] restaurantTypes) {
         while (true) {
             System.out.print("Type restaurant type. Available types: ");
-            for (RestaurantType k : restaurantTypes) {
-                System.out.print(k.name() + " ");
+            for (RestaurantType type : restaurantTypes) {
+                System.out.print(type.name() + " ");
             }
-            var consoleInputType = read.nextLine().toUpperCase(Locale.ROOT);
+            final var consoleInputType = read.nextLine().toUpperCase(Locale.ROOT);
             if (isValidRestaurantType(consoleInputType)) {
                 return RestaurantType.valueOf(consoleInputType);
-                //resolvedType = RestaurantType.valueOf(consoleInputType);
             }
         }
     }
@@ -50,9 +50,9 @@ public class RestaurantInputValidator {
         return scanner.nextLine();
     }
 
-    public float getCorrectPrice() {
+    public float getPrice() {
         while (true) {
-            var consoleInput = readLine();
+            final var consoleInput = readLine();
             if (isValidPrice(consoleInput)) {
                 return Float.parseFloat(consoleInput);
             }
@@ -78,7 +78,19 @@ public class RestaurantInputValidator {
         }
     }
 
-    public UUID correctId(UUID restaurantId) {
+    public UUID getId() {
+        UUID restaurantId = null;
+        var isIncorrectId = true;
+        while (isIncorrectId) {
+            final var consoleInputId = readLine();
+            if (isValidRestaurantId(consoleInputId)) {
+                isIncorrectId = false;
+                restaurantId = UUID.fromString(consoleInputId);
+            } else System.out.print("Type correct id: ");
+        }
+        return restaurantId;
+
+        /*public UUID correctId() {
         var isIncorrectId = true;
         while (isIncorrectId) {
             //var consoleInputId = restaurantInputValidator.readLine();
@@ -87,7 +99,7 @@ public class RestaurantInputValidator {
                 restaurantId = UUID.fromString(restaurantId.toString());
             } else System.out.print("Type correct id: ");
         }
-        return restaurantId;
+        return restaurantId;*/
         //}
     /*private UUID correctId(UUID restaurantId) {
         var isIncorrectId = true;

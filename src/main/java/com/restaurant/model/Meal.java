@@ -3,48 +3,41 @@ package com.restaurant.model;
 import java.util.UUID;
 
 public class Meal {
-    private UUID mealId = UUID.randomUUID();
-    private String mealName;
-    private float mealPrice;
+    private UUID id = UUID.randomUUID();
+    private String name;
+    private float price;
 
-    public Meal(UUID mealId, String mealName, float mealPrice) {
-        this.mealId = mealId;
-        this.mealName = mealName;
-        this.mealPrice = mealPrice;
+    public Meal(String name, float price) {
+        this.name = name;
+        this.price = price;
     }
 
-    public UUID getMealId() {
-        return mealId;
+    public UUID getId() {
+        return id;
     }
 
-    public String getMealName() {
-        return mealName;
+    public String getName() {
+        return name;
     }
 
-    public void setMealName(String mealName) {
-        this.mealName = mealName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public float getMealPrice() {
-        return mealPrice;
+    public float getPrice() {
+        return price;
     }
 
-    public void setMealPrice(float mealPrice) {
-        this.mealPrice = mealPrice;
+    public void setPrice(float price) {
+        this.price = price;
     }
 
     @Override // po co jest to nadpisywanie ?
     public String toString() {
         return "Meal{" +
-                "mealId=" + mealId +
-                ", name='" + mealName + '\'' +
-                ", price=" + mealPrice +
+                "mealId=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
                 '}';
     }
-
-
-    //    public void displayMeal() {
-    //       System.out.print(name + " ");
-    //       System.out.print(price + " ");
-    //    };
 }

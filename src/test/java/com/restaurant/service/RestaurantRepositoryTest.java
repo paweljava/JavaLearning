@@ -1,103 +1,108 @@
 package com.restaurant.service;
 
 import com.restaurant.model.Restaurant;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.UUID;
+import java.util.Set;
 
 import static com.restaurant.model.RestaurantType.*;
+import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RestaurantRepositoryTest {
 
-    private RestaurantRepository restaurantRepository;
+    private static final Restaurant RESTAURANT_1 = new Restaurant(randomUUID(), "U Czarnego", "Sosnowa", POLISH);
+    private static final Restaurant RESTAURANT_2 = new Restaurant(randomUUID(), "U Bialego", "Lesna", FRENCH);
+    private static final Restaurant RESTAURANT_3 = new Restaurant(randomUUID(), "U Zielonego", "Ogrodowa", AMERICAN);
 
-    @BeforeEach
-    void setUp() {
-        var restaurant = new Restaurant(UUID.randomUUID(), "U Czarnego", "Sosnowa", POLISH);
-        var restaurant2 = new Restaurant(UUID.randomUUID(), "U Bialego", "Lesna", FRENCH);
-        var restaurant3 = new Restaurant(UUID.randomUUID(), "U Zielonego", "Ogrodowa", AMERICAN);
-        restaurantRepository = new RestaurantRepository(new HashSet<>(List.of(restaurant, restaurant2, restaurant3)));
-    }
+    private RestaurantRepository restaurantRepository = new RestaurantRepository(new HashSet<>(List.of(RESTAURANT_1, RESTAURANT_2, RESTAURANT_3)));
 
     @Test
-    void should_add() {
+    void should_add_restaurant() {
         // given
-        var name = "Kebs";
-        var address = "Jalowa 3";
-        var restaurantType = POLISH;
+        final var name = "Kebs";
+        final var address = "Jalowa 3";
+        final var restaurantType = POLISH;
+        final var restaurant = new Restaurant(name, address, restaurantType);
 
         // when
-        var result = restaurantRepository.add(name, address, restaurantType);
+        final var result = restaurantRepository.add(restaurant);
 
         // then
-        var expected = new Restaurant(UUID.randomUUID(), name, address, restaurantType);
-        assertEquals(expected.getRestaurantName(), result.getRestaurantName());
-        assertEquals(expected.getRestaurantAddress(), result.getRestaurantAddress());
+        final var expected = new Restaurant(randomUUID(), name, address, restaurantType);
+        assertEquals(expected.getName(), result.getName());
+        assertEquals(expected.getAddress(), result.getAddress());
         assertEquals(expected.getType(), result.getType());
     }
 
     @Test
-    void should_read() {
+    void should_get_all_restaurants() {
         // given
         // when
-        var result = restaurantRepository.getAllRestaurants();
+        final var result = restaurantRepository.getAllRestaurants();
 
         // then
-        Assertions.assertFalse(result.isEmpty());
+        assertTrue(!result.isEmpty());
+        assertEquals(Set.of(RESTAURANT_1, RESTAURANT_2, RESTAURANT_3), result);
     }
 
     @Test
-    void should_update() {
+    void should_update_restaurant_address_by_name() {
         // given
-        var name = "U Bialego";
-        var newAddress = "Wesola 7";
+        final var newAddress = "Wesola 7";
 
         // when
-        var result = restaurantRepository.update(name, newAddress);
+        final var result = restaurantRepository.updateRestaurantAddressByName(RESTAURANT_1.getName(), newAddress);
 
         // then
-        var expected = new Restaurant(result.getRestaurantId(), result.getRestaurantName(), newAddress, result.getType());
-        // Assertions.assertSame(expected, result);
-        // Assertions.assertEquals(expected, result);
-        assertEquals(expected.getRestaurantId(), result.getRestaurantId());
-        assertEquals(expected.getRestaurantName(), result.getRestaurantName());
-        assertEquals(newAddress, result.getRestaurantAddress());
-        assertEquals(expected.getType(), result.getType());
+        assertEquals(newAddress, result.getAddress());
+        assertEquals(RESTAURANT_1.getId(), result.getId());
+        assertEquals(RESTAURANT_1.getName(), result.getName());
+        assertEquals(RESTAURANT_1.getType(), result.getType());
     }
 
     @Test
     void should_throw_exception_when_no_restaurant_found() {
         // given
-        String name = "U Szarego";
-        String newAddress = "Wesola 7";
+        final var nonExistingRestaurantName = "U Szarego";
+        final var newAddress = "Wesola 7";
 
         // when
         // then
-        assertThrows(IllegalStateException.class, () -> restaurantRepository.update(name, newAddress));
+        assertThrows(IllegalStateException.class, () -> restaurantRepository.updateRestaurantAddressByName(nonExistingRestaurantName, newAddress));
     }
 
     @Test
-    void delete() {
+    void should_delete_restaurant() {
         // given
-        String name = "U Bialego";
+        final var name = "U Bialego";
 
         // when
         // then
         assertDoesNotThrow(() -> restaurantRepository.delete(name));
+    } // TEST DO POPRAWY
+
+    @Test
+    void should_update_restaurant_name_and_type_by_id() {
+        //given
+        //when
+        restaurantRepository.updateRestaurantNameAndTypeById(RESTAURANT_2.getId(), "U Grubego", AMERICAN);
+
+        //then
+        assertEquals("U Grubego", RESTAURANT_2.getName());
+        assertEquals(AMERICAN, RESTAURANT_2.getType());
     }
 
-    /*@Test
-    void should_not_delete_and_throw_exception_when_no_restaurant_found() {
-        // given
-        String name = "Bialego";
-
-        // when
-        // then
-        assertThrows(IllegalStateException.class, () -> restaurantCrudService.delete(name));
-    }*/
+    @Test
+    void should_throw_exception_when_restaurant_name_is_null() {
+        //given
+        //when
+        //then
+        assertThrows(IllegalStateException.class, () -> restaurantRepository.updateRestaurantNameAndTypeById(RESTAURANT_1.getId(), null, AMERICAN));
+    }
 }
+//maj 15, 2022 6:19:47 PM org.junit.platform.launcher.core.EngineDiscoveryOrchestrator lambda$logTestDescriptorExclusionReasons$7
+//INFO: 0 containers and 6 tests were Method or class mismatch
+// po wykonaniu testow wyswietla sie to co powyzej, blad czy tak ma byc ???

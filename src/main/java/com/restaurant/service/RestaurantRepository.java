@@ -16,7 +16,7 @@ import java.util.UUID;
 // HOMEWORK Complete CRUD operations
 public class RestaurantRepository {
 
-    private final Set<Restaurant> restaurantsList;
+    public final Set<Restaurant> restaurantsList;
 
     public RestaurantRepository(Set<Restaurant> restaurants) {
         this.restaurantsList = restaurants;
@@ -27,8 +27,7 @@ public class RestaurantRepository {
     }
 
     // Create
-    public Restaurant add(String name, String address, RestaurantType restaurantType) {
-        final var restaurant = new Restaurant(UUID.randomUUID(), name, address, restaurantType);
+    public Restaurant add(Restaurant restaurant) {
         restaurantsList.add(restaurant);
         return restaurant;
     }
@@ -39,13 +38,15 @@ public class RestaurantRepository {
     }
 
     // Update (only address is possible to change)
-    public Restaurant update(String restaurantName, String newRestaurantAddress) {
+    public Restaurant updateRestaurantAddressByName(String restaurantName, String newRestaurantAddress) {
         for (final var restaurant : restaurantsList) {
-            if (restaurant.getRestaurantName().equals(restaurantName)) {
-                final var newRestaurant = new Restaurant(restaurant.getRestaurantId(), restaurant.getRestaurantName(), newRestaurantAddress, restaurant.getType());
-                restaurantsList.add(newRestaurant);
+            if (restaurant.getName().equals(restaurantName)) {
+                restaurant.setAddress(newRestaurantAddress);
+                //final var newRestaurant = new Restaurant(restaurant.getId(), restaurant.getName(), newRestaurantAddress, restaurant.getType());
+                //restaurantsList.remove(restaurant);
+                //restaurantsList.add(newRestaurant);
                 System.out.println("Restaurant updated");
-                return newRestaurant;
+                return restaurant;
             }
         }
         throw new IllegalStateException();
@@ -53,17 +54,27 @@ public class RestaurantRepository {
 
     // Delete
     public void delete(String name) {
-        for (Restaurant restaurant : restaurantsList) {
-            if (restaurant.getRestaurantName().equals(name)) {
+        /*for (final var restaurant : restaurantsList) {
+            if (restaurant.getName().equals(name)) {
                 restaurantsList.remove(restaurant);
                 System.out.println("Restaurant deleted");
-                return;
             }
-        }
-        throw new IllegalStateException();
+        }*/
     }
 
     public boolean isRestaurantListEmpty() {
         return getAllRestaurants().isEmpty();
+    }
+
+    public void updateRestaurantNameAndTypeById(UUID restaurantId, String name, RestaurantType type) {
+        for (final var restaurant : getAllRestaurants()) {
+            if (restaurant.getId().equals(restaurantId) && name != null && type != null) {
+                restaurant.setName(name);
+                restaurant.setType(type);
+                System.out.println("Restaurant updated");
+                return;
+            }
+        }
+        throw new IllegalStateException();
     }
 }
